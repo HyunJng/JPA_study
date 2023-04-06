@@ -1,0 +1,17 @@
+spring:
+  #스프링 부트는 이런 거 없어도 기본적으로 내부 DB를 사용해서 동작함.
+#  datasource:
+#    url: jdbc:h2:mem:test; # 테스트는 내부 DB를 사용해서 동작하도록
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace
