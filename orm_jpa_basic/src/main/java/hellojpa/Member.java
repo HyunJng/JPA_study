@@ -19,12 +19,13 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
-
     @ManyToOne // Member이 Team테이블과의 관계에서 N의 역할
     @JoinColumn(name = "TEAM_ID") // Member 테이블의 foriegn키와 매핑
     private Team team;
+
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
 
     public void changeTeam(Team team) {
         this.team = team;
