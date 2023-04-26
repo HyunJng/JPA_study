@@ -17,23 +17,17 @@ public class JpaMain {
 
         tx.begin();
         try {
-            // 저장
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setTeam(team);
-            em.persist(member);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            em.flush();
-            em.clear();
+            em.persist(parent);
+//            em.persist(child1);
+//            em.persist(child2);
 
-            Member findMember = em.find(Member.class, member.getId());
-            List<Member> members = findMember.getTeam().getMembers();
-
-            members.stream().forEach((i) -> {System.out.println(i.getUsername());});
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -42,5 +36,17 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+    // 그런데 항상 팀을 출력하는 것이 아니라면 Member만 가져오는 것이 최적화(Team까지 가져오는 쿼리는 낭비)
+    private static void printMember(Member member) {
+        System.out.println("member.getUsername() = " + member.getUsername());
+    }
+    // 멤버를 출력할 때 항상 팀도 같이 출력해야하면 쿼리 날리는 시점에 같이 Team도 가져오는 것이 좋다.
+    private static void printMemberAndTeam(Member member) {
+        String username = member.getUsername();
+        System.out.println("username = " + username);
+
+        Team team = member.getTeam();
+        System.out.println("team = " + team.getName());
     }
 }

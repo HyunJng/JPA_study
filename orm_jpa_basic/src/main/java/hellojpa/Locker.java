@@ -13,6 +13,6 @@ public class Locker {
 
     private String name;
 
-    @OneToMany(mappedBy = "locker")
-    private Member member;
+//    @OneToMany(mappedBy = "locker")
+//    private Member member;
 }

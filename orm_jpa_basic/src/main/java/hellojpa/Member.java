@@ -23,9 +23,9 @@ public class Member extends BaseEntity{
     @JoinColumn(name = "TEAM_ID") // Member 테이블의 foriegn키와 매핑
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
+//    @OneToOne
+//    @JoinColumn(name = "LOCKER_ID")
+//    private Locker locker;
 
     public void changeTeam(Team team) {
         this.team = team;
