@@ -17,16 +17,31 @@ public class JpaMain {
 
         tx.begin();
         try {
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Member member = new Member();
+            member.setUsername("member");
+            member.setHomeAddress(new Address("homecity", "street", "zipcode"));
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
+            member.getFavoritFoods().add("치킨");
+            member.getFavoritFoods().add("피자");
 
-            em.persist(parent);
-//            em.persist(child1);
-//            em.persist(child2);
+            member.getAddressHistory().add(new AddressEntity("old1", "street", "zipcode"));
+            member.getAddressHistory().add(new AddressEntity("old2", "street", "zipcode"));
+
+            em.persist(member);
+
+            em.flush();
+            em.clear();
+
+            System.out.println("============= START ===============");
+//            Member findMember = em.find(Member.class, member.getId());
+//
+//            // 치킨 -> 한식 Collection도 값 타입이라 없애고 바꿔끼는 형태로 해야함.
+//            findMember.getFavoritFoods().remove("치킨");
+//            findMember.getFavoritFoods().add("한식");
+//
+//            // old1 -> new1
+//            findMember.getAddressHistory().remove(new AddressEntity("old1", "street", "zipcode")); // equals, hashcode를 제대로 넣어야 동작
+//            findMember.getAddressHistory().add(new AddressEntity("new1", "street", "zipcode"));
 
             tx.commit();
         } catch (Exception e) {
