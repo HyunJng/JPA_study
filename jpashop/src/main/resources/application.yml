@@ -8,7 +8,7 @@ spring:
   jpa:
     hibernate:
 #      application실행 시점에 jpa가 테이블 자동으로 create해줌.
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
 #        hibernate나 JPA가 만든 SQL문을 System.out으로 출력

@@ -53,6 +53,15 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+
        /* return em.createQuery("select o from Order o join o.member m" )
 //                이 부분은 들어올 지 아닐지 확신이 없어서 동적 처리를 해주어야 한다.
 //                "where o.status = :status" +
