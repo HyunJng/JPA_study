@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  * Order객체일 때
  * * Order -> Member
  * * Order -> Delivery
+ *
+ * => fetch 조인으로 최적화한다.
  */
 @RestController
 @AllArgsConstructor
@@ -55,6 +57,9 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v3/simple-orders")
     public List<SimpleOrderDto> ordersV3() {
+        /**
+         * fetch 조인으로 최적화
+         * */
         return orderRepository.findAllWithMemberDelivery()
                 .stream()
                 .map(SimpleOrderDto::new)

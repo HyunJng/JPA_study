@@ -14,6 +14,8 @@ spring:
 #        hibernate나 JPA가 만든 SQL문을 System.out으로 출력
 #        show_sql: true
         format_sql: true
+#
+        default_batch_fetch_size: 100
 logging.level:
 #        hibernate나 JPA가 만든 SQL문을 log로 출력
   org.hibernate.SQL: debug

@@ -25,7 +25,7 @@ public class Member {
     private Address address;
 
     // order의 member필드에 있는 것을 반영하는 거울일 뿐이야
-//    @JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "member") // Member이 One쪽이기 때문, 주인이 아니라는 의미
     private List<Order> orders = new ArrayList<>();
 
