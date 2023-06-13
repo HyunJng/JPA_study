@@ -1,5 +1,7 @@
 package study.datajpa.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ class MemberRepositoryTest {
     private MemberRepository memberRepository;
     @Autowired
     TeamRepository teamRepository;
+    @PersistenceContext // 벌크 연산 후 영속성 컨텍스트를 다 날려야함
+    EntityManager em; // 같은 transaction 이면 같은 em이 불러와져서 사용됨 => member, team Repository 모두 같은 em 사용
 
     @Test
     public void testMember() throws Exception {
@@ -230,5 +234,28 @@ class MemberRepositoryTest {
         assertThat(page.getNumber()).isEqualTo(0); // 현재 페이지 번호
         assertThat(page.hasPrevious()).isFalse(); // 첫번째 페이지인가
         assertThat(page.hasNext()).isTrue(); // 다음 페이지가 있나
+    }
+
+    @Test
+    public void bulkUpdate() throws Exception {
+        // given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member5", 40));
+
+        // when
+        int resultCount = memberRepository.bulkAgePlus(20);
+//        em.flush(); // JPQL이 적히면 flush가 자동으로 되기 때문에 여기선 flush는 필요 없음
+        em.clear(); // 같은 로직
+
+        Member member = memberRepository.findMemberByUsername("member4");
+        Integer age = member.getAge(); // DB는 22살, 영속성컨텍스트에는 여전히 21로 남아있음
+
+        // then
+        assertThat(resultCount).isEqualTo(3);
+//        assertThat(age).isEqualTo(21);
+        assertThat(age).isEqualTo(22);
     }
 }
