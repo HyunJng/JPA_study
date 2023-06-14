@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)// Entity는 디폴트 생성자가 있어야함(프록시 때문). protected로 생성
 @ToString(of = {"id", "username", "age"})
 //@Setter// setter은 entity에 안쓰는 편이시다.
-public class Member {
+public class Member extends JpaBaseEntity{
 
     @Id @GeneratedValue
     @Column(name = "member_id")
