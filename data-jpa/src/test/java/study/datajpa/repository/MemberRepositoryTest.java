@@ -258,4 +258,35 @@ class MemberRepositoryTest {
 //        assertThat(age).isEqualTo(21);
         assertThat(age).isEqualTo(22);
     }
+
+    /** EntityGraph */
+
+    @Test
+    public void findMemberLazy() throws Exception {
+        // given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member memberA = new Member("member1", 10, teamA);
+        Member memberB = new Member("member2", 10, teamB);
+
+        memberRepository.save(memberA);
+        memberRepository.save(memberB);
+
+        em.flush();
+        em.clear();
+
+        // when
+//        List<Member> members = memberRepository.findAll(); // not fetch join
+//        List<Member> members = memberRepository.findMemberFetchJoin();
+        List<Member> members = memberRepository.findAll();
+        // team은 Lazy이기 때문에 N + 1문제 발생 => fetch 조인 해야함.
+        for (Member member : members) {
+            System.out.println("member = " + member.getUsername());
+            System.out.println("member = " + member.getTeam().getName());
+        }
+
+        // then
+    }
 }

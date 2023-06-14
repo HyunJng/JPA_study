@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -52,4 +53,24 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying(clearAutomatically = true) // 이게 있어야 executeUpdate가 실행. getResultList 같은 select가 기본이기 때문
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
+
+    /**
+     * @EntityGraph : 연관된 것을 한꺼번에 DB에서 fetch join하여 가져오는 것
+     */
+
+    // 이렇게 매번 JPQL 쓰는거 귀찮아
+    @Query("select m from Member m left join fetch m.team") // member안에 team까지 한 방에 다 끌고옴
+    List<Member> findMemberFetchJoin();
+
+    @Override
+    @EntityGraph(attributePaths = {"team"}) //
+    List<Member> findAll();
+
+    //JPQL도 짜고 ENtityGraph넣는 것도 됨
+    @EntityGraph(attributePaths = {"team"})
+    @Query("select m from Member m")
+    List<Member> findMemberEntityGraph();
+
+    @EntityGraph(attributePaths = {"team"})
+    List<Member> findByUsername(@Param("username") String username);
 }
