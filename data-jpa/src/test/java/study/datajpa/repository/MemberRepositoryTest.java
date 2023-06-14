@@ -289,4 +289,36 @@ class MemberRepositoryTest {
 
         // then
     }
+
+    /** JPA Hint */
+    @Test
+    public void queryHint() throws Exception {
+        // given
+        Member member1 = memberRepository.save(new Member("member1", 10));
+        em.flush();
+        em.clear();
+
+        // when
+//        Member findMember = memberRepository.findById(member1.getId()).get();
+//        findMember.changeUsername("member2"); // dirty checking하려면 원복이 있어야함.
+        // 데이터 두 개 가지고 있어야해서 비효율 & 비교해야하는 로직 필요
+        // 변경할 목적이 아니라 DB에서 조회만 하고 끝낼거라도 가지고 오는 순간 원본
+        // JPA 표준은 정의 X, Hibernate가 정의
+
+        Member findMember = memberRepository.findReadOnlyByUsername("member1");
+        findMember.changeUsername("member2");
+        em.flush();
+        // then
+    }
+    
+    @Test
+    public void lock() throws Exception {
+        // given
+        Member member1 = memberRepository.save(new Member("member1", 10));
+        em.flush();
+        em.clear();
+        
+        // when
+        List<Member> result = memberRepository.findLockByUsername("member1");
+    }
 }
